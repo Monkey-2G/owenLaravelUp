@@ -31,7 +31,7 @@ class UserController extends Controller
 
         $result = [
             'status' => 200,
-            'msg' => 'Success'
+            'msg' => 'Create Success'
         ];
 
         try {
@@ -39,7 +39,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             $result = [
                 'status' => 500,
-                'msg' => 'fail',
+                'msg' => 'Create Fail',
                 'error' => $e->getMessage()
             ];
         }
@@ -62,7 +62,7 @@ class UserController extends Controller
 
         $result = [
             'status' => 200,
-            'msg' => 'Success'
+            'msg' => 'Update Success'
         ];
         
         try {
@@ -70,11 +70,68 @@ class UserController extends Controller
         } catch (Exception $e) {
             $result = [
                 'status' => 500,
-                'msg' => 'fail',
+                'msg' => 'Update Fail',
                 'error' => $e->getMessage()
             ];
         }
 
         return response()->json($result);
     } 
+
+    /**
+     * user 삭제
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function delete (Request $request) : JsonResponse
+    {
+        $data = $request->only([
+            'id'
+        ]);
+
+        $result = [
+            'status' => 200,
+            'msg' => 'Delete Success'
+        ];
+
+        try {
+            $result['data'] = $this->userService->deleteUser($data);
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'msg' => 'Delete Fail',
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result);
+    }
+
+    /**
+     * user id로 조회
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function selectById(Request $request) : JsonResponse
+    {
+        $data = $request->only([
+            'id'
+        ]);
+
+        $result = [
+            'status' => 200,
+            'msg' => 'Select Success'
+        ];
+
+        try {
+            $result['data'] = $this->userService->SelectById($data);
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'msg' => 'Select Fail',
+                'error' => $e->getMessage()
+            ];
+        }
+        return response()->json($result);
+    }
 }
