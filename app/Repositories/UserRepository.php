@@ -42,15 +42,24 @@ class UserRepository {
     {
         $user = $this->getUserById($data); 
 
-        if(! $user->count())
-        {
-            throw new Exception('not found user.');
-        }
-
         $user->name = $data['name'];
         $user->update();
 
         return $user->fresh();
+    }
+
+    /**
+     * user 삭제
+     * @param Array $data (id)
+     * @return User
+     */
+    public function delete(Array $data) : User
+    {
+        $user = $this->getUserById($data);
+
+        $user->delete();
+
+        return $user;
     }
 
     /**
@@ -60,7 +69,6 @@ class UserRepository {
      */
     public function getUserById(Array $data) : User
     {
-        return User::find($data['id']);
+        return User::findOrFail($data['id']);
     }
-
 }
