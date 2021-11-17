@@ -61,21 +61,87 @@ class UserService {
         DB::beginTransaction();
 
         try {
-            Log::info('user update start.');
+            Log::info('[id : '.$data['id'].'] user update start.');
             
             $updatedUser = $this->userRepository->update($data);
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('[id : '.$data['id'].'] user update failed. :: '. $e->getMessage());
             
-            throw new Exception('user update failed.');
-
-            Log::error('user update failed.');
+            throw new Exception('[id : '.$data['id'].'] user update failed. :: '. $e->getMessage());
         }
 
         DB::commit();
 
-        Log::info('user update success.');
+        Log::info('[id : '.$data['id'].'] user update success.');
 
         return $updatedUser;
+    }
+
+    /**
+     * user 삭제 및 삭제 이전 파라미터 유효성 검사
+     * @param Array $data (id)
+     * @return User
+     */
+    public function deleteUser (Array $data) : User
+    {
+        $validateData = Validator::make($data, [
+            'id' => 'required'
+        ]);
+
+        if($validateData->fails())
+        {
+            throw new Exception($validateData->errors()->first());
+        }
+
+        DB::beginTransaction();
+
+        try {
+            Log::info('[id : '.$data['id'].'] user delete start.');
+
+            $deletedUser = $this->userRepository->delete($data);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('[id : '.$data['id'].'] user delete failed. :: '. $e->getMessage());
+
+            throw new Exception('[id : '.$data['id'].'] user delete failed. :: '. $e->getMessage());
+        }
+
+        DB::commit();
+
+        Log::info('[id : '.$data['id'].'] user delete success.');
+
+        return $deletedUser;
+    }
+
+    /**
+     * user id로 조회
+     * @param Array $data (id)
+     * @return User
+     */
+    public function SelectById (Array $data) : User
+    {
+        $validateData = Validator::make($data, [
+            'id' => 'required'
+        ]);
+
+        if($validateData->fails())
+        {
+            throw new Exception($validateData->errors()->first());
+        }
+
+        try {
+            Log::info('[id : '.$data['id'].'] user select start.');
+
+            $selectdUser = $this->userRepository->getUserById($data);
+        } catch (Exception $e) {
+            Log::error('[id : '.$data['id'].'] user select failed. :: '. $e->getMessage());
+
+            throw new Exception('[id : '.$data['id'].'] user select failed. :: '. $e->getMessage());
+        }
+
+        Log::info('[id : '.$data['id'].'] user select success.');
+
+        return $selectdUser;
     }
 }
