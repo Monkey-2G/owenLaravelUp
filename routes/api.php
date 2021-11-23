@@ -23,5 +23,5 @@ Route::prefix('user')->group(function () {
     Route::post('create', [UserController::class, 'create']);
     Route::post('update', [UserController::class, 'update']);
     Route::post('delete', [UserController::class, 'delete']);
-    Route::post('selectById', [UserController::class, 'selectById']);
+    Route::get('selectById', [UserController::class, 'selectById']);
 });

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository {
 
@@ -22,15 +23,19 @@ class UserRepository {
      */
     public function save(Array $data) : User
     {
-        $user = new $this->user;
+        $createUser = DB::transaction(function () use($data): User {
+            $user = new $this->user;
+
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->password = Crypt::encryptString($data['password']);
+    
+            $user->save();
+
+            return $user;
+        });
         
-        $user->name = $data['name'];
-        $user->email = $data['email'];
-        $user->password = Crypt::encryptString($data['password']);
-
-        $user->save();
-
-        return $user->fresh();
+        return $createUser;
     }
 
     /**
@@ -40,12 +45,20 @@ class UserRepository {
      */
     public function update (Array $data) : User
     {
-        $user = $this->getUserById($data); 
+        $updateUser = DB::transaction(function () use ($data): User {
+            try {
+                $user = $this->getUserById($data); 
 
-        $user->name = $data['name'];
-        $user->update();
+                $user->name = $data['name'];
+                $user->update();
+            } catch (Exception $e) {
+                throw $e;
+            }
 
-        return $user->fresh();
+            return $user;
+        });
+
+        return $updateUser;
     }
 
     /**
@@ -55,11 +68,18 @@ class UserRepository {
      */
     public function delete(Array $data) : User
     {
-        $user = $this->getUserById($data);
+        $deletedUser = DB::transaction(function () use($data): User {
+            try {
+                $user = $this->getUserById($data);
+                $user->delete();
 
-        $user->delete();
+            } catch (Exception $e) {
+                throw $e;
+            }
+            return $user;         
+        });
 
-        return $user;
+        return $deletedUser;
     }
 
     /**

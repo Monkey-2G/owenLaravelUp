@@ -40,7 +40,7 @@ class UserController extends Controller
             $result = [
                 'status' => 500,
                 'msg' => 'Create Fail',
-                'error' => $e->getMessage()
+                'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
             ];
         }
 
@@ -71,7 +71,7 @@ class UserController extends Controller
             $result = [
                 'status' => 500,
                 'msg' => 'Update Fail',
-                'error' => $e->getMessage()
+                'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
             ];
         }
 
@@ -100,7 +100,7 @@ class UserController extends Controller
             $result = [
                 'status' => 500,
                 'msg' => 'Delete Fail',
-                'error' => $e->getMessage()
+                'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
             ];
         }
 
@@ -129,7 +129,7 @@ class UserController extends Controller
             $result = [
                 'status' => 500,
                 'msg' => 'Select Fail',
-                'error' => $e->getMessage()
+                'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
             ];
         }
         return response()->json($result);
