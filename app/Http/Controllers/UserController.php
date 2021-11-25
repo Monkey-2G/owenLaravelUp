@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Controllers;
 
 use App\Services\UserService;
@@ -9,11 +11,10 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    private $userService;
+    public function __construct(
+        private UserService $userService
+    ) {
 
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
     }
 
     /**
@@ -124,7 +125,7 @@ class UserController extends Controller
         ];
 
         try {
-            $result['data'] = $this->userService->SelectById($data);
+            $result['data'] = $this->userService->selectById($data);
         } catch (Exception $e) {
             $result = [
                 'status' => 500,

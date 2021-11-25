@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Services;
 
 use App\Models\User;
@@ -12,19 +14,18 @@ use Illuminate\Support\Facades\Validator;
 
 class UserService {
 
-    private $userRepository;
+    public function __construct(
+        private UserRepository $userRepository
+    ) {
 
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
     }
 
     /**
      * user 생성 및 생성 이전 파라미터 유효성 검사
-     * @param Array $data (name, email, password)
+     * @param array $data (name, email, password)
      * @return User
      */
-    public function createUser(Array $data) : User
+    public function createUser(array $data) : User
     {
         $validateData = Validator::make($data, [
             'name' => 'required',
@@ -42,10 +43,10 @@ class UserService {
 
     /**
      * user 정보 수정 및 수정 이전 파라미터 유효성 검사
-     * @param Array $data (id, name, email)
+     * @param array $data (id, name, email)
      * @return User
      */
-    public function updateUser(Array $data) : User
+    public function updateUser(array $data) : User
     {
         $validateData = Validator::make($data, [
             'id' => 'required',
@@ -80,10 +81,10 @@ class UserService {
 
     /**
      * user 삭제 및 삭제 이전 파라미터 유효성 검사
-     * @param Array $data (id)
+     * @param array $data (id)
      * @return User
      */
-    public function deleteUser (Array $data) : User
+    public function deleteUser (array $data) : User
     {
         $validateData = Validator::make($data, [
             'id' => 'required'
@@ -116,10 +117,10 @@ class UserService {
 
     /**
      * user id로 조회
-     * @param Array $data (id)
+     * @param array $data (id)
      * @return User
      */
-    public function SelectById (Array $data) : User
+    public function selectById (array $data) : User
     {
         $validateData = Validator::make($data, [
             'id' => 'required'
