@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repositories;
 
 use App\Models\User;
@@ -9,19 +11,18 @@ use Illuminate\Support\Facades\DB;
 
 class UserRepository {
 
-    private $user;
+    public function __construct(
+        private User $user
+    ) {
 
-    public function __construct(User $user)
-    {
-        $this->user = $user;
     }
 
     /**
      * user 생성
-     * @param Array $data (name, Email, password)
+     * @param array $data (name, Email, password)
      * @return User
      */
-    public function save(Array $data) : User
+    public function save(array $data) : User
     {
         $createUser = DB::transaction(function () use($data): User {
             $user = new $this->user;
@@ -40,10 +41,10 @@ class UserRepository {
 
     /**
      * user 정보 수정
-     * @param Array $data (name, email)
+     * @param array $data (name, email)
      * @return User
      */
-    public function update (Array $data) : User
+    public function update (array $data) : User
     {
         $updateUser = DB::transaction(function () use ($data): User {
             try {
@@ -63,10 +64,10 @@ class UserRepository {
 
     /**
      * user 삭제
-     * @param Array $data (id)
+     * @param array $data (id)
      * @return User
      */
-    public function delete(Array $data) : User
+    public function delete(array $data) : User
     {
         $deletedUser = DB::transaction(function () use($data): User {
             try {
@@ -84,10 +85,10 @@ class UserRepository {
 
     /**
      * PK인 id 값으로 user 조회
-     * @param Array $data (id)
+     * @param array $data (id)
      * @return User
      */
-    public function getUserById(Array $data) : User
+    public function getUserById(array $data) : User
     {
         return User::findOrFail($data['id']);
     }
