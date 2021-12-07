@@ -9,6 +9,7 @@ use App\Repositories\UserRepository;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class UserService {
 
@@ -42,7 +43,7 @@ class UserService {
             $createdUser = $this->userRepository->save($data);
 
             Log::info('[id : '.$createdUser['id'].'] user create success.');
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Log::error('user create failed. :: '. $e->getFile().'/'.$e->getLine().' / '.$e->getMessage());
             throw $e;
         }
@@ -75,7 +76,7 @@ class UserService {
 
             Log::info('[id : '.$data['id'].'] user update success.');
 
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Log::error('[id : '.$data['id'].'] user update failed. :: '. $e->getFile().'/'.$e->getLine().' / '.$e->getMessage());
             throw $e;
         }
@@ -105,7 +106,7 @@ class UserService {
             $deletedUser = $this->userRepository->delete($data);
 
             Log::info('[id : '.$data['id'].'] user delete success.');
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Log::error('[id : '.$data['id'].'] user delete failed. :: '. $e->getFile().'/'.$e->getLine().' / '.$e->getMessage());
            throw $e;
         }
@@ -133,7 +134,7 @@ class UserService {
             Log::info('[id : '.$data['id'].'] user select start.');
 
             $selectdUser = $this->userRepository->getUserById($data);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Log::error('[id : '.$data['id'].'] user select failed. :: '. $e->getFile().'/'.$e->getLine().' / '.$e->getMessage());
             throw $e;
         }

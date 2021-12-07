@@ -5,9 +5,8 @@ declare(strict_types = 1);
 namespace App\Repositories;
 
 use App\Models\User;
-use Exception;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class UserRepository {
 
@@ -25,11 +24,11 @@ class UserRepository {
     public function save(array $data) : User
     {
         $createUser = DB::transaction(function () use($data): User {
-            $user = new $this->user;
+            $user = $this->user;
 
             $user->name = $data['name'];
             $user->email = $data['email'];
-            $user->password = Crypt::encryptString($data['password']);
+            $user->password = $data['password'];
     
             $user->save();
 
@@ -46,18 +45,19 @@ class UserRepository {
      */
     public function update (array $data) : User
     {
-        $updateUser = DB::transaction(function () use ($data): User {
-            try {
+        try {
+            $updateUser = DB::transaction(function () use ($data): User {
+
                 $user = $this->getUserById($data); 
 
                 $user->name = $data['name'];
                 $user->update();
-            } catch (Exception $e) {
-                throw $e;
-            }
 
             return $user;
-        });
+            });
+        } catch (Throwable $e) {
+            throw $e;
+        }
 
         return $updateUser;
     }
@@ -69,16 +69,18 @@ class UserRepository {
      */
     public function delete(array $data) : User
     {
-        $deletedUser = DB::transaction(function () use($data): User {
-            try {
+        try {
+            $deletedUser = DB::transaction(function () use($data): User {
+            
                 $user = $this->getUserById($data);
                 $user->delete();
-
-            } catch (Exception $e) {
-                throw $e;
-            }
+                
             return $user;         
         });
+
+        } catch (Throwable $e) {
+            throw $e;
+        }
 
         return $deletedUser;
     }

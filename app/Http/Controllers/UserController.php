@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Services\UserService;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -37,7 +37,7 @@ class UserController extends Controller
 
         try {
             $result['data'] = $this->userService->createUser($data);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $result = [
                 'status' => 500,
                 'msg' => 'Create Fail',
@@ -53,13 +53,13 @@ class UserController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function update (Request $request) : JsonResponse
+    public function update (string $id, string $name, string $email) : JsonResponse
     {
-        $data = $request->only([
-            'id',
-            'name',
-            'email'
-        ]);
+        $data = [
+            'id' => $id,
+            'name' => $name,
+            'email' => $email
+        ];
 
         $result = [
             'status' => 200,
@@ -68,7 +68,7 @@ class UserController extends Controller
         
         try {
             $result['data'] = $this->userService->updateUser($data);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $result = [
                 'status' => 500,
                 'msg' => 'Update Fail',
@@ -81,14 +81,14 @@ class UserController extends Controller
 
     /**
      * user 삭제
-     * @param Request $request
+     * @param string $id
      * @return JsonResponse
      */
-    public function delete (Request $request) : JsonResponse
+    public function delete (string $id) : JsonResponse
     {
-        $data = $request->only([
-            'id'
-        ]);
+        $data = [
+            'id' => $id
+        ];
 
         $result = [
             'status' => 200,
@@ -97,7 +97,7 @@ class UserController extends Controller
 
         try {
             $result['data'] = $this->userService->deleteUser($data);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $result = [
                 'status' => 500,
                 'msg' => 'Delete Fail',
@@ -110,14 +110,14 @@ class UserController extends Controller
 
     /**
      * user id로 조회
-     * @param Request $request
+     * @param string $id
      * @return JsonResponse
      */
-    public function selectById(Request $request) : JsonResponse
+    public function selectById(string $id) : JsonResponse
     {
-        $data = $request->only([
-            'id'
-        ]);
+        $data = [
+            'id' => $id
+        ];
 
         $result = [
             'status' => 200,
@@ -126,7 +126,7 @@ class UserController extends Controller
 
         try {
             $result['data'] = $this->userService->selectById($data);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $result = [
                 'status' => 500,
                 'msg' => 'Select Fail',
