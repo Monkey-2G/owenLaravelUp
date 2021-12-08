@@ -6,8 +6,6 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Throwable;
-
 class UserRepository {
 
     public function __construct(
@@ -45,19 +43,15 @@ class UserRepository {
      */
     public function update (array $data) : User
     {
-        try {
-            $updateUser = DB::transaction(function () use ($data): User {
+        $updateUser = DB::transaction(function () use ($data): User {
 
-                $user = $this->getUserById($data); 
+            $user = $this->getUserById($data); 
 
-                $user->name = $data['name'];
-                $user->update();
+            $user->name = $data['name'];
+            $user->update();
 
             return $user;
-            });
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        });
 
         return $updateUser;
     }
@@ -69,18 +63,14 @@ class UserRepository {
      */
     public function delete(array $data) : User
     {
-        try {
-            $deletedUser = DB::transaction(function () use($data): User {
+        $deletedUser = DB::transaction(function () use($data): User {
+        
+            $user = $this->getUserById($data);
+            $user->delete();
             
-                $user = $this->getUserById($data);
-                $user->delete();
-                
             return $user;         
-        });
+         });
 
-        } catch (Throwable $e) {
-            throw $e;
-        }
 
         return $deletedUser;
     }

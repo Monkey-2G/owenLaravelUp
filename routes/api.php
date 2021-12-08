@@ -20,8 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('user')->group(function () {
-    Route::post('create', [UserController::class, 'create']);
-    Route::patch('update/{id}/name/{name}/email/{email}', [UserController::class, 'update']);
-    Route::delete('delete/{id}', [UserController::class, 'delete']);
-    Route::get('selectById/{id}', [UserController::class, 'selectById']);
+    Route::post('', [UserController::class, 'create']);
+    Route::patch('{id}/{name}/{email}', [UserController::class, 'update']);
+    Route::delete('{id}', [UserController::class, 'delete']);
+    Route::get('{id}', [UserController::class, 'selectById']);
 });
