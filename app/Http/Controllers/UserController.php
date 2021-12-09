@@ -84,7 +84,7 @@ class UserController extends Controller
      * @param string $id
      * @return JsonResponse
      */
-    public function delete (string $id) : JsonResponse
+    public function delete (int $id) : JsonResponse
     {
         $data = [
             'id' => $id
@@ -113,7 +113,7 @@ class UserController extends Controller
      * @param string $id
      * @return JsonResponse
      */
-    public function selectById(string $id) : JsonResponse
+    public function selectById(int $id) : JsonResponse
     {
         $data = [
             'id' => $id

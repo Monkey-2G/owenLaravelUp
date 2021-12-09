@@ -65,7 +65,7 @@ class UserRepository {
     {
         $deletedUser = DB::transaction(function () use($data): User {
         
-            $user = $this->getUserById($data);
+            $user = $this->getUserById($data['id']);
             $user->delete();
             
             return $user;         
@@ -80,8 +80,8 @@ class UserRepository {
      * @param array $data (id)
      * @return User
      */
-    public function getUserById(array $data) : User
+    public function getUserById(int $id) : User
     {
-        return User::findOrFail($data['id']);
+        return User::findOrFail($id);
     }
 }

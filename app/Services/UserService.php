@@ -116,7 +116,7 @@ class UserService {
 
         Log::info('[id : '.$data['id'].'] user select start.');
 
-        $selectdUser = $this->userRepository->getUserById($data);
+        $selectdUser = $this->userRepository->getUserById($data['id']);
 
         Log::info('[id : '.$data['id'].'] user select success.');
 
