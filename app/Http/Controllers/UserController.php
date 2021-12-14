@@ -35,15 +35,15 @@ class UserController extends Controller
             'msg' => 'Create Success'
         ];
 
-        try {
+        // try {
             $result['data'] = $this->userService->createUser($data);
-        } catch (Throwable $e) {
-            $result = [
-                'status' => 500,
-                'msg' => 'Create Fail',
-                'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
-            ];
-        }
+        // } catch (Throwable $e) {
+        //     $result = [
+        //         'status' => 500,
+        //         'msg' => 'Create Fail',
+        //         'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
+        //     ];
+        // }
 
         return response()->json($result);
     }
@@ -66,15 +66,15 @@ class UserController extends Controller
             'msg' => 'Update Success'
         ];
         
-        try {
+        // try {
             $result['data'] = $this->userService->updateUser($data);
-        } catch (Throwable $e) {
-            $result = [
-                'status' => 500,
-                'msg' => 'Update Fail',
-                'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
-            ];
-        }
+        // } catch (Throwable $e) {
+        //     $result = [
+        //         'status' => 500,
+        //         'msg' => 'Update Fail',
+        //         'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
+        //     ];
+        // }
 
         return response()->json($result);
     } 
@@ -95,15 +95,15 @@ class UserController extends Controller
             'msg' => 'Delete Success'
         ];
 
-        try {
+        // try {
             $result['data'] = $this->userService->deleteUser($data);
-        } catch (Throwable $e) {
-            $result = [
-                'status' => 500,
-                'msg' => 'Delete Fail',
-                'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
-            ];
-        }
+        // } catch (Throwable $e) {
+        //     $result = [
+        //         'status' => 500,
+        //         'msg' => 'Delete Fail',
+        //         'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
+        //     ];
+        // }
 
         return response()->json($result);
     }
@@ -124,15 +124,15 @@ class UserController extends Controller
             'msg' => 'Select Success'
         ];
 
-        try {
+        // try {
             $result['data'] = $this->userService->selectById($data);
-        } catch (Throwable $e) {
-            $result = [
-                'status' => 500,
-                'msg' => 'Select Fail',
-                'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
-            ];
-        }
+        // } catch (Throwable $e) {
+        //     $result = [
+        //         'status' => 500,
+        //         'msg' => 'Select Fail',
+        //         'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
+        //     ];
+        // }
         return response()->json($result);
     }
 }
