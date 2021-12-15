@@ -4,8 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -40,13 +40,13 @@ class Handler extends ExceptionHandler
             //
         });
 
-        $this->renderable(function(Throwable $e, Request $request)
+        $this->renderable(function(Throwable $e, Request $request): Response
         {
             return $this->customException($e, $request);
         });
     }
 
-    public function customException(Throwable $e, Request $request) 
+    public function customException(Throwable $e, Request $request): Response
     {
         /**
          * @TODO
@@ -54,6 +54,6 @@ class Handler extends ExceptionHandler
          * 2. customException을 내부 method가 아닌 외부 파일로 따로 빼야하는지?
          * 3. render 이외에도 report에 대한 작업 처리는 어떻게 해야하는지?
          */
-        return response('Exception Handleing Test', 444);
+        return response('Exception Handleing Test', 404);
     }
 }
