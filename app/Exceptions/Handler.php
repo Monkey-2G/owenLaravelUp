@@ -54,6 +54,6 @@ class Handler extends ExceptionHandler
          * 2. customException을 내부 method가 아닌 외부 파일로 따로 빼야하는지?
          * 3. render 이외에도 report에 대한 작업 처리는 어떻게 해야하는지?
          */
-        return response('Exception Handleing Test', 404);
+        return response('Exception Handleing Test', Response::HTTP_NOT_FOUND);
     }
 }
