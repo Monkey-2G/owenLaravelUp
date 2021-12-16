@@ -7,8 +7,6 @@ namespace App\Services;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,7 +36,14 @@ class UserService {
             throw new Exception($validateData->errors()->first());
         }
 
-        return $this->userRepository->save($data);
+        Log::info('user create start.');
+
+        $createdUser = $this->userRepository->save($data);
+
+        Log::info('[id : '.$createdUser['id'].'] user create success.');
+
+
+        return $createdUser;
     }
 
     /**
@@ -59,20 +64,9 @@ class UserService {
             throw new Exception($validateData->errors()->first());
         }
 
-        DB::beginTransaction();
+        Log::info('[id : '.$data['id'].'] user update start.');
 
-        try {
-            Log::info('[id : '.$data['id'].'] user update start.');
-            
-            $updatedUser = $this->userRepository->update($data);
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error('[id : '.$data['id'].'] user update failed. :: '. $e->getMessage());
-            
-            throw new Exception('[id : '.$data['id'].'] user update failed. :: '. $e->getMessage());
-        }
-
-        DB::commit();
+        $updatedUser = $this->userRepository->update($data);
 
         Log::info('[id : '.$data['id'].'] user update success.');
 
@@ -95,20 +89,9 @@ class UserService {
             throw new Exception($validateData->errors()->first());
         }
 
-        DB::beginTransaction();
+        Log::info('[id : '.$data['id'].'] user delete start.');
 
-        try {
-            Log::info('[id : '.$data['id'].'] user delete start.');
-
-            $deletedUser = $this->userRepository->delete($data);
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error('[id : '.$data['id'].'] user delete failed. :: '. $e->getMessage());
-
-            throw new Exception('[id : '.$data['id'].'] user delete failed. :: '. $e->getMessage());
-        }
-
-        DB::commit();
+        $deletedUser = $this->userRepository->delete($data);
 
         Log::info('[id : '.$data['id'].'] user delete success.');
 
@@ -131,15 +114,9 @@ class UserService {
             throw new Exception($validateData->errors()->first());
         }
 
-        try {
-            Log::info('[id : '.$data['id'].'] user select start.');
+        Log::info('[id : '.$data['id'].'] user select start.');
 
-            $selectdUser = $this->userRepository->getUserById($data);
-        } catch (Exception $e) {
-            Log::error('[id : '.$data['id'].'] user select failed. :: '. $e->getMessage());
-
-            throw new Exception('[id : '.$data['id'].'] user select failed. :: '. $e->getMessage());
-        }
+        $selectdUser = $this->userRepository->getUserById($data['id']);
 
         Log::info('[id : '.$data['id'].'] user select success.');
 

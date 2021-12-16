@@ -5,9 +5,7 @@ declare(strict_types = 1);
 namespace App\Repositories;
 
 use App\Models\User;
-use Exception;
-use Illuminate\Support\Facades\Crypt;
-
+use Illuminate\Support\Facades\DB;
 class UserRepository {
 
     public function __construct(
@@ -23,15 +21,19 @@ class UserRepository {
      */
     public function save(array $data) : User
     {
-        $user = new $this->user;
+        $createUser = DB::transaction(function () use($data): User {
+            $user = $this->user;
+
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->password = $data['password'];
+    
+            $user->save();
+
+            return $user;
+        });
         
-        $user->name = $data['name'];
-        $user->email = $data['email'];
-        $user->password = Crypt::encryptString($data['password']);
-
-        $user->save();
-
-        return $user->fresh();
+        return $createUser;
     }
 
     /**
@@ -41,12 +43,17 @@ class UserRepository {
      */
     public function update (array $data) : User
     {
-        $user = $this->getUserById($data); 
+        $updateUser = DB::transaction(function () use ($data): User {
 
-        $user->name = $data['name'];
-        $user->update();
+            $user = $this->getUserById($data); 
 
-        return $user->fresh();
+            $user->name = $data['name'];
+            $user->update();
+
+            return $user;
+        });
+
+        return $updateUser;
     }
 
     /**
@@ -56,11 +63,16 @@ class UserRepository {
      */
     public function delete(array $data) : User
     {
-        $user = $this->getUserById($data);
+        $deletedUser = DB::transaction(function () use($data): User {
+        
+            $user = $this->getUserById($data['id']);
+            $user->delete();
+            
+            return $user;         
+         });
 
-        $user->delete();
 
-        return $user;
+        return $deletedUser;
     }
 
     /**
@@ -68,8 +80,8 @@ class UserRepository {
      * @param array $data (id)
      * @return User
      */
-    public function getUserById(array $data) : User
+    public function getUserById(int $id) : User
     {
-        return User::findOrFail($data['id']);
+        return User::findOrFail($id);
     }
 }
