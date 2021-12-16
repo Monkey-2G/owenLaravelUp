@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Services\UserService;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -35,15 +35,15 @@ class UserController extends Controller
             'msg' => 'Create Success'
         ];
 
-        try {
+        // try {
             $result['data'] = $this->userService->createUser($data);
-        } catch (Exception $e) {
-            $result = [
-                'status' => 500,
-                'msg' => 'Create Fail',
-                'error' => $e->getMessage()
-            ];
-        }
+        // } catch (Throwable $e) {
+        //     $result = [
+        //         'status' => 500,
+        //         'msg' => 'Create Fail',
+        //         'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
+        //     ];
+        // }
 
         return response()->json($result);
     }
@@ -53,86 +53,86 @@ class UserController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function update (Request $request) : JsonResponse
+    public function update (string $id, string $name, string $email) : JsonResponse
     {
-        $data = $request->only([
-            'id',
-            'name',
-            'email'
-        ]);
+        $data = [
+            'id' => $id,
+            'name' => $name,
+            'email' => $email
+        ];
 
         $result = [
             'status' => 200,
             'msg' => 'Update Success'
         ];
         
-        try {
+        // try {
             $result['data'] = $this->userService->updateUser($data);
-        } catch (Exception $e) {
-            $result = [
-                'status' => 500,
-                'msg' => 'Update Fail',
-                'error' => $e->getMessage()
-            ];
-        }
+        // } catch (Throwable $e) {
+        //     $result = [
+        //         'status' => 500,
+        //         'msg' => 'Update Fail',
+        //         'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
+        //     ];
+        // }
 
         return response()->json($result);
     } 
 
     /**
      * user 삭제
-     * @param Request $request
+     * @param string $id
      * @return JsonResponse
      */
-    public function delete (Request $request) : JsonResponse
+    public function delete (int $id) : JsonResponse
     {
-        $data = $request->only([
-            'id'
-        ]);
+        $data = [
+            'id' => $id
+        ];
 
         $result = [
             'status' => 200,
             'msg' => 'Delete Success'
         ];
 
-        try {
+        // try {
             $result['data'] = $this->userService->deleteUser($data);
-        } catch (Exception $e) {
-            $result = [
-                'status' => 500,
-                'msg' => 'Delete Fail',
-                'error' => $e->getMessage()
-            ];
-        }
+        // } catch (Throwable $e) {
+        //     $result = [
+        //         'status' => 500,
+        //         'msg' => 'Delete Fail',
+        //         'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
+        //     ];
+        // }
 
         return response()->json($result);
     }
 
     /**
      * user id로 조회
-     * @param Request $request
+     * @param string $id
      * @return JsonResponse
      */
-    public function selectById(Request $request) : JsonResponse
+    public function selectById(int $id) : JsonResponse
     {
-        $data = $request->only([
-            'id'
-        ]);
+        $data = [
+            'id' => $id
+        ];
 
         $result = [
             'status' => 200,
             'msg' => 'Select Success'
         ];
 
-        try {
+        // try {
             $result['data'] = $this->userService->selectById($data);
-        } catch (Exception $e) {
-            $result = [
-                'status' => 500,
-                'msg' => 'Select Fail',
-                'error' => $e->getMessage()
-            ];
-        }
+        // } catch (Throwable $e) {
+        //     $result = [
+        //         'status' => 500,
+        //         'msg' => 'Select Fail',
+        //         'error' => $e->getFile().'/'.$e->getLine().' / '.$e->getMessage()
+        //     ];
+        // }
         return response()->json($result);
     }
 }
