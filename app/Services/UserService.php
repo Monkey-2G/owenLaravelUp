@@ -7,6 +7,8 @@ namespace App\Services;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Exception;
+use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,7 +25,7 @@ class UserService {
      * @param array $data (name, email, password)
      * @return User
      */
-    public function createUser(array $data) : User
+    public function createUser(array $data): User
     {
         $validateData = Validator::make($data, [
             'name' => 'required',
@@ -51,7 +53,7 @@ class UserService {
      * @param array $data (id, name, email)
      * @return User
      */
-    public function updateUser(array $data) : User
+    public function updateUser(array $data): User
     {
         $validateData = Validator::make($data, [
             'id' => 'required',
@@ -78,7 +80,7 @@ class UserService {
      * @param array $data (id)
      * @return User
      */
-    public function deleteUser (array $data) : User
+    public function deleteUser (array $data): User
     {
         $validateData = Validator::make($data, [
             'id' => 'required'
@@ -103,7 +105,7 @@ class UserService {
      * @param array $data (id)
      * @return User
      */
-    public function selectById (array $data) : User
+    public function selectById (array $data): User
     {
         $validateData = Validator::make($data, [
             'id' => 'required'
@@ -121,5 +123,42 @@ class UserService {
         Log::info('[id : '.$data['id'].'] user select success.');
 
         return $selectdUser;
+    }
+
+    public function login (array $data): SupportCollection
+    {
+        $validateData = Validator::make($data, [
+            'email' => 'required|string',
+            'password' => 'required|string'
+
+        ]);
+
+        if($validateData->fails())
+        {
+            throw new Exception($validateData->errors()->first());
+        }
+
+        Log::info('[id : '.$data['email'].'] user login start.');
+
+        $loginCheckUser = $this->userRepository->getUserByEmail($data['email']);
+        
+        /**
+         * TODO LIST
+         * 1. 이미 로그인에 성공하여 로그인 토큰이 있을 때, 토큰 생성 하지않게 처리
+         */
+
+        // email 조회 user가 있고, 비밀번호가 일치할 경우 토큰 생성
+        if($loginCheckUser && Crypt::decryptString($loginCheckUser->password) !== $data['password'])
+        {
+            $token = $loginCheckUser->createToken('login-token')->plainTextToken;
+            Log::info('[id : '.$data['email'].'] user login success.');
+        }
+
+        $returnLoginCollect = collect([
+            'user' => $loginCheckUser,
+            'token' => $token
+        ]);
+
+       return $returnLoginCollect;
     }
 }

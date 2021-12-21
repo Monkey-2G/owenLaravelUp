@@ -19,7 +19,7 @@ class UserRepository {
      * @param array $data (name, Email, password)
      * @return User
      */
-    public function save(array $data) : User
+    public function save(array $data): User
     {
         $createUser = DB::transaction(function () use($data): User {
             $user = $this->user;
@@ -41,7 +41,7 @@ class UserRepository {
      * @param array $data (name, email)
      * @return User
      */
-    public function update (array $data) : User
+    public function update (array $data): User
     {
         $updateUser = DB::transaction(function () use ($data): User {
 
@@ -61,7 +61,7 @@ class UserRepository {
      * @param array $data (id)
      * @return User
      */
-    public function delete(array $data) : User
+    public function delete(array $data): User
     {
         $deletedUser = DB::transaction(function () use($data): User {
         
@@ -80,8 +80,18 @@ class UserRepository {
      * @param array $data (id)
      * @return User
      */
-    public function getUserById(int $id) : User
+    public function getUserById(int $id): User
     {
         return User::findOrFail($id);
     }
+
+    /**
+     * Unique key인 email 값으로 user 조회
+     * @param string $email
+     * @return User
+     */
+    public function getUserByEmail(string $email): User
+    {
+        return  User::where('email', '=', $email)->first();
+    }   
 }

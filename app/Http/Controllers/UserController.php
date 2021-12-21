@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Throwable;
 
 class UserController extends Controller
 {
@@ -22,7 +21,7 @@ class UserController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function create (Request $request) : JsonResponse
+    public function create (Request $request): JsonResponse
     {
         $data = $request->only([
             'name',
@@ -53,7 +52,7 @@ class UserController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function update (string $id, string $name, string $email) : JsonResponse
+    public function update (string $id, string $name, string $email): JsonResponse
     {
         $data = [
             'id' => $id,
@@ -84,7 +83,7 @@ class UserController extends Controller
      * @param string $id
      * @return JsonResponse
      */
-    public function delete (int $id) : JsonResponse
+    public function delete (int $id): JsonResponse
     {
         $data = [
             'id' => $id
@@ -113,7 +112,7 @@ class UserController extends Controller
      * @param string $id
      * @return JsonResponse
      */
-    public function selectById(int $id) : JsonResponse
+    public function selectById(int $id): JsonResponse
     {
         $data = [
             'id' => $id
@@ -135,4 +134,26 @@ class UserController extends Controller
         // }
         return response()->json($result);
     }
+
+    /**
+     * user login
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function login (Request $request): JsonResponse
+    {
+        $data = $request->only([
+            'email',
+            'password'
+        ]);
+
+        $result = [
+            'status' => 200,
+            'msg' => 'Login Success'
+        ];
+
+        $result['result'] = $this->userService->login($data);
+
+        return response()->json($result);
+    }   
 }

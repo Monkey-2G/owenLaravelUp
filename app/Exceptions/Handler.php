@@ -40,10 +40,11 @@ class Handler extends ExceptionHandler
             //
         });
 
-        $this->renderable(function(Throwable $e, Request $request): Response
-        {
-            return $this->customException($e, $request);
-        });
+        // 에러 확인을 위해 임시로 exception handling 해제
+        // $this->renderable(function(Throwable $e, Request $request): Response
+        // {
+        //     return $this->customException($e, $request);
+        // });
     }
 
     public function customException(Throwable $e, Request $request): Response
