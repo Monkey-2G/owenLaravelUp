@@ -124,41 +124,4 @@ class UserService {
 
         return $selectdUser;
     }
-
-    public function login (array $data): SupportCollection
-    {
-        $validateData = Validator::make($data, [
-            'email' => 'required|string',
-            'password' => 'required|string'
-
-        ]);
-
-        if($validateData->fails())
-        {
-            throw new Exception($validateData->errors()->first());
-        }
-
-        Log::info('[id : '.$data['email'].'] user login start.');
-
-        $loginCheckUser = $this->userRepository->getUserByEmail($data['email']);
-        
-        /**
-         * TODO LIST
-         * 1. 이미 로그인에 성공하여 로그인 토큰이 있을 때, 토큰 생성 하지않게 처리
-         */
-
-        // email 조회 user가 있고, 비밀번호가 일치할 경우 토큰 생성
-        if($loginCheckUser && Crypt::decryptString($loginCheckUser->password) !== $data['password'])
-        {
-            $token = $loginCheckUser->createToken('login-token')->plainTextToken;
-            Log::info('[id : '.$data['email'].'] user login success.');
-        }
-
-        $returnLoginCollect = collect([
-            'user' => $loginCheckUser,
-            'token' => $token
-        ]);
-
-       return $returnLoginCollect;
-    }
 }

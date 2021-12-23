@@ -134,26 +134,4 @@ class UserController extends Controller
         // }
         return response()->json($result);
     }
-
-    /**
-     * user login
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function login (Request $request): JsonResponse
-    {
-        $data = $request->only([
-            'email',
-            'password'
-        ]);
-
-        $result = [
-            'status' => 200,
-            'msg' => 'Login Success'
-        ];
-
-        $result['result'] = $this->userService->login($data);
-
-        return response()->json($result);
-    }   
 }
